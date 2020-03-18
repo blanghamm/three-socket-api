@@ -2,10 +2,10 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-const cors = require("cors");
+// const cors = require("cors");
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+// app.use(cors());
 
 app.get("*", (req, res) => {
   res.send("I am alive").status(200);
