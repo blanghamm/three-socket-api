@@ -4,8 +4,7 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const helmet = require("helmet");
 const PORT = process.env.PORT || 3005;
-
-let clients = {};
+const { userJoin, userLeave } = require("./utils/users");
 
 app.use(helmet());
 
@@ -14,24 +13,28 @@ app.get("*", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("connected: " + socket.id);
-  socket.join("artroom");
-  if (clients["art room"] == undefined) {
-    clients["art room"] = 1;
-  } else {
-    clients["art room"]++;
-  }
-  console.log(clients);
-  io.sockets.emit("clientsJoined", clients["art room"]);
-  socket.on("outgoing", (x) => {
-    console.log("x data " + x);
-    io.emit("three", x);
+  let clientNum = Object.keys(io.sockets.in("art room").connected).length;
+  socket.on("subscribe", (room) => {
+    const user = userJoin(socket.id, room);
+    socket.join(user.room);
   });
 
-  socket.on("disconnect", () => {
-    console.log("disconnected: " + socket.id), clients["art room"]--;
-    io.sockets.emit("clientsLeft", clients["art room"]);
-  });
+  io.to("art room").emit("clientsJoined", clientNum);
+
+  // const clients = ;
+
+  // if (clients["control room"] == undefined) {
+  //   clients["control room"] = 1;
+  // } else {
+  //   clients["control room"]++;
+  // }
+  // if (io.nsps["/"].adapter.rooms["art room"]) {
+  //   console.log(io.nsps["/"].adapter.rooms["art room"].length);
+  // }
+
+  console.log(clientNum);
+
+  socket.on("disconnect", () => {});
 });
 
 server.listen(PORT, () => console.log(`listening on port ${PORT}!`));
