@@ -13,7 +13,7 @@ app.get("*", (req, res) => {
   res.send("I am alive").status(200);
 });
 
-io.on("connection", (socket, room) => {
+io.on("connection", (socket) => {
   console.log("connected: " + socket.id);
   socket.join("artroom");
   if (clients["art room"] == undefined) {
