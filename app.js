@@ -13,7 +13,7 @@ app.get("*", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  let clientNum = Object.keys(io.sockets.in("art room").connected).length;
+  let clientNum = Object.keys(io.sockets.in("control room").connected).length;
   socket.on("subscribe", (room) => {
     const user = userJoin(socket.id, room);
     socket.join(user.room);
