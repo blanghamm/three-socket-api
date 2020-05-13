@@ -7,6 +7,10 @@ function userJoin(id, room) {
   return user;
 }
 
+function getCurrentUser(id) {
+  return users.find((user) => user.id === id);
+}
+
 function userLeave(id) {
   const index = users.findIndex((user) => user.id === id);
   if (index !== -1) {
@@ -14,4 +18,4 @@ function userLeave(id) {
   }
 }
 
-module.exports = { userJoin, userLeave };
+module.exports = { userJoin, userLeave, users, getCurrentUser };

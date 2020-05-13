@@ -4,7 +4,7 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const helmet = require("helmet");
 const PORT = process.env.PORT || 3005;
-const { userJoin, userLeave } = require("./utils/users");
+const { userJoin, userLeave, users, getCurrentUser } = require("./utils/users");
 
 app.use(helmet());
 
@@ -12,29 +12,25 @@ app.get("*", (req, res) => {
   res.send("I am alive").status(200);
 });
 
+let clientNum = [];
+let test = users;
+
 io.on("connection", (socket) => {
-  let clientNum = Object.keys(io.sockets.in("control room").connected).length;
   socket.on("subscribe", (room) => {
     const user = userJoin(socket.id, room);
     socket.join(user.room);
+    io.to("art room").emit("clientsJoined", test);
   });
-
-  io.to("art room").emit("clientsJoined", clientNum);
-
-  // const clients = ;
-
-  // if (clients["control room"] == undefined) {
-  //   clients["control room"] = 1;
-  // } else {
-  //   clients["control room"]++;
-  // }
-  // if (io.nsps["/"].adapter.rooms["art room"]) {
-  //   console.log(io.nsps["/"].adapter.rooms["art room"].length);
-  // }
+  clientNum.push(Object.keys(io.sockets.in("control room").connected).length);
 
   console.log(clientNum);
+  console.log("join log ", test);
 
-  socket.on("disconnect", () => {});
+  socket.on("disconnect", () => {
+    clientNum.pop(Object.keys(io.sockets.in("control room").connected).length);
+    const user = userLeave(socket.id);
+    io.to("art room").emit("clientsLeave", test);
+  });
 });
 
 server.listen(PORT, () => console.log(`listening on port ${PORT}!`));
