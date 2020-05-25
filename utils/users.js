@@ -1,7 +1,11 @@
 const users = [];
 
 function userJoin(id, room) {
-  const user = { id, room };
+  const x = (users.length % 30) * 40.05;
+  const y = (users.length / 30) * 1.05;
+  const z = 0;
+  const user = { id, room, x, y, z };
+
   users.push(user);
   return user;
 }
