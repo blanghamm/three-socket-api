@@ -4,7 +4,14 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const helmet = require("helmet");
 const PORT = process.env.PORT || 3005;
-const { userJoin, userLeave, users, userAction } = require("./utils/users");
+const {
+  userJoin,
+  userLeave,
+  users,
+  userAction,
+  userRotation,
+  userMovement,
+} = require("./utils/users");
 
 app.use(helmet());
 
@@ -34,6 +41,16 @@ io.on("connection", (socket) => {
   socket.on("spawn", (input) => {
     userAction(socket.id, input);
     io.emit("actionId", test);
+  });
+
+  socket.on("updateUserRotation", (rotation) => {
+    userRotation(socket.id, rotation);
+    io.emit("userIsRotating", test);
+  });
+
+  socket.on("updateUserMovement", (axis) => {
+    userMovement(socket.id, axis);
+    io.emit("updateMovement", test);
   });
 
   socket.on("disconnect", () => {
