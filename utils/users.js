@@ -1,20 +1,44 @@
-const users = [{ test: 1 }];
+const users = [];
+
+function createGrid() {
+  for (let i = 0; i < 1; i++) {
+    for (let j = 0; j < 10; j++) {
+      const x = i * 54;
+      const y = j * 30;
+      const z = Math.random(j * 10) * 30;
+      const rotation = 0;
+      const input = 0;
+      const aiMovement = Math.random(Math.sin(4)) / 50;
+      const id = null;
+      const color = "green";
+      const scale = 0;
+      const name = "anon";
+      const user = {
+        id,
+        x,
+        y,
+        z,
+        rotation,
+        input,
+        aiMovement,
+        name,
+        scale,
+        color,
+      };
+      users.push(user);
+    }
+  }
+}
 
 function userJoin(id, room) {
-  let x = (users.length % 30) * 25.05;
-  let y = 0;
-  let z = 0;
-  let rotation = 0;
-  let input = 0;
-  // if ((users.length === 4, 8, 16)) {
-  //   y = y - 40.05;
-  //   x = 0;
-  // }
-
-  const user = { id, room, x, y, z, rotation, input };
-
-  users.push(user);
-  return user;
+  var found = false;
+  users.map(function (entry, i) {
+    if (!found && !entry.id) {
+      entry.id = id;
+      found = true;
+    }
+  });
+  return users;
 }
 
 function userRotation(id, rotation) {
@@ -47,11 +71,45 @@ function userAction(id, input) {
   });
 }
 
+function userNickName(id, name) {
+  users.map(function (entry, i) {
+    const index = users.findIndex((user) => user.id === id);
+    if (index === i) {
+      entry.name = name;
+    }
+    return users;
+  });
+}
+
+function userColorChange(id, color) {
+  users.map(function (entry, i) {
+    const index = users.findIndex((user) => user.id === id);
+    if (index === i) {
+      entry.color = color;
+    }
+    return users;
+  });
+}
+
+function userScale(id, scale) {
+  users.map(function (entry, i) {
+    const index = users.findIndex((user) => user.id === id);
+    if (index === i) {
+      entry.scale = scale;
+    }
+    return users;
+  });
+}
+
 function userLeave(id) {
   const index = users.findIndex((user) => user.id === id);
-  if (index !== -1) {
-    return users.splice(index, 1)[0];
-  }
+  users.map(function (entry, i) {
+    if (index === i) {
+      entry.id = null;
+      entry.input = 0;
+      entry.rotation = 0;
+    }
+  });
 }
 
 module.exports = {
@@ -61,4 +119,8 @@ module.exports = {
   userAction,
   userRotation,
   userMovement,
+  createGrid,
+  userNickName,
+  userColorChange,
+  userScale,
 };

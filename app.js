@@ -11,6 +11,10 @@ const {
   userAction,
   userRotation,
   userMovement,
+  createGrid,
+  userNickName,
+  userColorChange,
+  userScale,
 } = require("./utils/users");
 
 app.use(helmet());
@@ -20,6 +24,8 @@ app.get("*", (req, res) => {
 });
 
 let test = users;
+
+createGrid();
 
 io.on("connection", (socket) => {
   //Joining a room
@@ -51,6 +57,21 @@ io.on("connection", (socket) => {
   socket.on("updateUserMovement", (axis) => {
     userMovement(socket.id, axis);
     io.emit("updateMovement", test);
+  });
+
+  socket.on("addNickName", (name) => {
+    userNickName(socket.id, name);
+    io.emit("updateNickName", test);
+  });
+
+  socket.on("updateUserColor", (color) => {
+    userColorChange(socket.id, color);
+    io.emit("updateColor", test);
+  });
+
+  socket.on("updateUserScale", (scale) => {
+    userScale(socket.id, scale);
+    io.emit("updateScale", test);
   });
 
   socket.on("disconnect", () => {
