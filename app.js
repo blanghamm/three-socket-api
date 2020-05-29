@@ -14,7 +14,9 @@ const {
   createGrid,
   userNickName,
   userColorChange,
-  userScale,
+  userScaleX,
+  userScaleY,
+  userScaleZ,
 } = require("./utils/users");
 
 app.use(helmet());
@@ -69,9 +71,21 @@ io.on("connection", (socket) => {
     io.emit("updateColor", test);
   });
 
-  socket.on("updateUserScale", (scale) => {
-    userScale(socket.id, scale);
-    io.emit("updateScale", test);
+  //User Scale Input and output sockets
+
+  socket.on("updateUserScaleX", (scaleX) => {
+    userScaleX(socket.id, scaleX);
+    io.emit("updateScaleX", test);
+  });
+
+  socket.on("updateUserScaleY", (scaleY) => {
+    userScaleY(socket.id, scaleY);
+    io.emit("updateScaleY", test);
+  });
+
+  socket.on("updateUserScaleZ", (scaleZ) => {
+    userScaleZ(socket.id, scaleZ);
+    io.emit("updateScaleZ", test);
   });
 
   socket.on("disconnect", () => {
