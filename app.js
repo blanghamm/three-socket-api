@@ -9,14 +9,18 @@ const {
   userLeave,
   users,
   userAction,
-  userRotation,
-  userMovement,
-  createGrid,
+  userRotationX,
+  userRotationY,
+  userRotationZ,
+  userMovementX,
+  userMovementY,
+  userMovementZ,
   userNickName,
   userColorChange,
   userScaleX,
   userScaleY,
   userScaleZ,
+  aiMoving,
 } = require("./utils/users");
 
 app.use(helmet());
@@ -26,8 +30,6 @@ app.get("*", (req, res) => {
 });
 
 let test = users;
-
-createGrid();
 
 io.on("connection", (socket) => {
   //Joining a room
@@ -51,14 +53,32 @@ io.on("connection", (socket) => {
     io.emit("actionId", test);
   });
 
-  socket.on("updateUserRotation", (rotation) => {
-    userRotation(socket.id, rotation);
-    io.emit("userIsRotating", test);
+  //User rotation sockets
+  socket.on("updateUserRotationX", (rotationX) => {
+    userRotationX(socket.id, rotationX);
+    io.emit("userRotationX", test);
+  });
+  socket.on("updateUserRotationY", (rotationY) => {
+    userRotationY(socket.id, rotationY);
+    io.emit("userRotationY", test);
+  });
+  socket.on("updateUserRotationZ", (rotationZ) => {
+    userRotationZ(socket.id, rotationZ);
+    io.emit("userRotationZ", test);
   });
 
-  socket.on("updateUserMovement", (axis) => {
-    userMovement(socket.id, axis);
-    io.emit("updateMovement", test);
+  //User movement sockets, for each axis of movement
+  socket.on("updateUserMovementX", (movementX) => {
+    userMovementX(socket.id, movementX);
+    io.emit("updateUserMovementX", test);
+  });
+  socket.on("updateUserMovementY", (movementY) => {
+    userMovementY(socket.id, movementY);
+    io.emit("updateMovementY", test);
+  });
+  socket.on("updateUserMovementZ", (movementZ) => {
+    userMovementZ(socket.id, movementZ);
+    io.emit("updateMovementY", test);
   });
 
   socket.on("addNickName", (name) => {
@@ -72,17 +92,14 @@ io.on("connection", (socket) => {
   });
 
   //User Scale Input and output sockets
-
   socket.on("updateUserScaleX", (scaleX) => {
     userScaleX(socket.id, scaleX);
     io.emit("updateScaleX", test);
   });
-
   socket.on("updateUserScaleY", (scaleY) => {
     userScaleY(socket.id, scaleY);
     io.emit("updateScaleY", test);
   });
-
   socket.on("updateUserScaleZ", (scaleZ) => {
     userScaleZ(socket.id, scaleZ);
     io.emit("updateScaleZ", test);

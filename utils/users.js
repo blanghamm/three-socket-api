@@ -1,19 +1,31 @@
 const users = [];
 
-function createGrid() {
-  for (let i = 0; i < 10; i++) {
+const colors = [
+  "#A2CCB6",
+  "#FCEEB5",
+  "#EE786E",
+  "#e0feff",
+  "lightpink",
+  "lightblue",
+];
+
+//write indivdual function for movement on axis and rotation
+
+function userJoin(id, room) {
+  for (let i = 0; i < 1; i++) {
     for (let j = 0; j < 1; j++) {
-      const x = i * 20;
-      const y = j * 30;
-      const z = Math.random(j * 10) * 30;
+      const x = i + users.length * 10;
+      const y = j + users.length * 10;
+      const z = 0;
       const rotationX = 0;
       const rotationY = 0;
       const rotationZ = 0;
+      const randomRotation = Math.round(Math.random()) * 45;
       const input = 0;
-      const aiMovement = Math.random(Math.sin(4)) / 50;
-      const id = null;
-      const color = 0;
-      const scaleX = 0;
+      const random = Math.random();
+      const aiMovement = 0;
+      const color = colors[Math.floor(Math.random() * (colors.length - 1))];
+      const scaleX = 1;
       const scaleY = 0;
       const scaleZ = 0;
       const name = "anon";
@@ -23,6 +35,7 @@ function createGrid() {
         y,
         z,
         rotationX,
+        rotationZ,
         input,
         aiMovement,
         name,
@@ -30,29 +43,20 @@ function createGrid() {
         scaleY,
         scaleZ,
         color,
+        random,
+        randomRotation,
       };
       users.push(user);
     }
   }
-}
 
-//write indivdual function for movement on axis and rotation
-
-function userJoin(id, room) {
-  var found = false;
-  users.map(function (entry, i) {
-    if (!found && !entry.id) {
-      entry.id = id;
-      found = true;
-    }
-  });
   return users;
 }
 
 //Rotation axis functions
 
 function userRotationX(id, rotationX) {
-  users.map(function (entry, i) {
+  users.forEach(function (entry, i) {
     const index = users.findIndex((user) => user.id === id);
     if (index === i) {
       entry.rotationX = rotationX;
@@ -62,7 +66,7 @@ function userRotationX(id, rotationX) {
 }
 
 function userRotationY(id, rotationY) {
-  users.map(function (entry, i) {
+  users.forEach(function (entry, i) {
     const index = users.findIndex((user) => user.id === id);
     if (index === i) {
       entry.rotationY = rotationY;
@@ -72,7 +76,7 @@ function userRotationY(id, rotationY) {
 }
 
 function userRotationZ(id, rotationZ) {
-  users.map(function (entry, i) {
+  users.forEach(function (entry, i) {
     const index = users.findIndex((user) => user.id === id);
     if (index === i) {
       entry.rotationZ = rotationZ;
@@ -83,18 +87,38 @@ function userRotationZ(id, rotationZ) {
 
 //User axis movement functions
 
-function userMovement(id, axis) {
-  users.map(function (entry, i) {
+function userMovementX(id, movementX) {
+  users.forEach(function (entry, i) {
     const index = users.findIndex((user) => user.id === id);
     if (index === i) {
-      entry.z = axis;
+      entry.x = movementX;
+    }
+    return users;
+  });
+}
+
+function userMovementY(id, movementY) {
+  users.forEach(function (entry, i) {
+    const index = users.findIndex((user) => user.id === id);
+    if (index === i) {
+      entry.y = movementY;
+    }
+    return users;
+  });
+}
+
+function userMovementZ(id, movementZ) {
+  users.forEach(function (entry, i) {
+    const index = users.findIndex((user) => user.id === id);
+    if (index === i) {
+      entry.z = movementZ;
     }
     return users;
   });
 }
 
 function userAction(id, input) {
-  users.map(function (entry, i) {
+  users.forEach(function (entry, i) {
     const index = users.findIndex((user) => user.id === id);
     if (index === i) {
       entry.input = input;
@@ -104,7 +128,7 @@ function userAction(id, input) {
 }
 
 function userNickName(id, name) {
-  users.map(function (entry, i) {
+  users.forEach(function (entry, i) {
     const index = users.findIndex((user) => user.id === id);
     if (index === i) {
       entry.name = name;
@@ -114,7 +138,7 @@ function userNickName(id, name) {
 }
 
 function userColorChange(id, color) {
-  users.map(function (entry, i) {
+  users.forEach(function (entry, i) {
     const index = users.findIndex((user) => user.id === id);
     if (index === i) {
       entry.color = color;
@@ -126,7 +150,7 @@ function userColorChange(id, color) {
 //User scale fucntions
 
 function userScaleX(id, scaleX) {
-  users.map(function (entry, i) {
+  users.forEach(function (entry, i) {
     const index = users.findIndex((user) => user.id === id);
     if (index === i) {
       entry.scaleX = scaleX;
@@ -136,7 +160,7 @@ function userScaleX(id, scaleX) {
 }
 
 function userScaleY(id, scaleY) {
-  users.map(function (entry, i) {
+  users.forEach(function (entry, i) {
     const index = users.findIndex((user) => user.id === id);
     if (index === i) {
       entry.scaleY = scaleY;
@@ -146,7 +170,7 @@ function userScaleY(id, scaleY) {
 }
 
 function userScaleZ(id, scaleZ) {
-  users.map(function (entry, i) {
+  users.forEach(function (entry, i) {
     const index = users.findIndex((user) => user.id === id);
     if (index === i) {
       entry.scaleZ = scaleZ;
@@ -157,12 +181,9 @@ function userScaleZ(id, scaleZ) {
 
 function userLeave(id) {
   const index = users.findIndex((user) => user.id === id);
-  users.map(function (entry, i) {
-    if (index === i) {
-      entry.id = null;
-      entry.input = 0;
-    }
-  });
+  if (index !== -1) {
+    users.splice(index, 1)[0];
+  }
 }
 
 module.exports = {
@@ -173,8 +194,9 @@ module.exports = {
   userRotationX,
   userRotationY,
   userRotationZ,
-  userMovement,
-  createGrid,
+  userMovementX,
+  userMovementY,
+  userMovementZ,
   userNickName,
   userColorChange,
   userScaleX,
