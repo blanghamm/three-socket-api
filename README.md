@@ -1,0 +1,1 @@
+This github repo contains all the server logic for Collective Art, a project based around connecting multple users to one art room. It is needed to keep all connected users updated and uses socket io for realtime connections and updates between the client and server.
